@@ -1,0 +1,54 @@
+<p></p>
+<div class="container px-5 px-sm-0">
+  <div id="error_explanation text-red">
+    <% if @book.errors.any? %>
+      <h3>
+        <% if @book.errors.count == 1 %>
+          <%= @book.errors.count %> error prohibited this obj from being saved:
+        <% else %>
+          <%= @book.errors.count %> errors prohibited this obj from being saved:
+        <% end %>
+      </h3>
+      <ul>
+        <% @book.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="row">
+    <%= render 'common', book: @book ,user: current_user %>
+    <div class="col-md-8 offset-md-1">
+      <%= render "books/search" %>
+      <div class="text-danger"><%= flash[:notice] %></div>
+      <h2>Books</h2>
+      <table class="table table-hover table-inverse">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Opinion</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @books != nil %>
+            <% @books.each do |book| %>
+              <tr>
+                <td><%= link_to image_tag(book.user.get_profile_image(40,40)), user_path(book.user) %></td>
+                <td><%= link_to book.title, book_path(book) %></td>
+                <td><%= book.body %></td>
+                <%= render 'favorites/favorite_button', book: book %>
+                <td>コメント数: <%= book.book_comments.count %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <div class="text-red">検索結果がありません</div>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
